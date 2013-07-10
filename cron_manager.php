@@ -206,10 +206,11 @@ global $wpdb;
 	$schedule = wp_get_schedules();
 	
 	?>
-<input class="cron_manager_input"  type="checkbox" id="selectAll" value="1"/>
-<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
-<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
-
+<div class="cron_manager_actions">
+	<input class="cron_manager_input"  type="checkbox" id="selectAll" value="1"/>
+	<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
+	<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
+</div>
 	<table id="tablacron" class="wp-list-table plugins cron_manager">
 <thead>
 		<tr><th style="width:65px;"><?php _e('Delete', 'cron_manager'); ?></th>
