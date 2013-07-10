@@ -55,7 +55,7 @@ $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
 		echo '<input type="hidden" id="restoretimestamp" name="restoretimestamp" value="'.$snapshot->restoretimestamp.'"/>';
-		echo '<input type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
+	echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
 		echo '</form>';
 	}
 die();
@@ -66,7 +66,7 @@ $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
 		echo '<input type="hidden" id="restoretimestamp" name="restoretimestamp" value="'.$snapshot->restoretimestamp.'"/>';
-		echo '<input type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
+		echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
 		echo '</form>';
 	}
 die();	
@@ -198,7 +198,7 @@ global $wpdb;
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
 		echo '<input type="hidden" id="restoretimestamp" name="restoretimestamp" value="'.$snapshot->restoretimestamp.'"/>';
-		echo '<input type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
+		echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
 		echo '</form>';
 	}
 	echo "</div><h2>This is your current Wordpress Cron</h2>";
@@ -207,8 +207,8 @@ global $wpdb;
 	
 	?>
 <input class="cron_manager_input"  type="checkbox" id="selectAll" value="1"/>
-<input class="cron_manager_input" type="button" id="BorrarMasivo" value="Delete Selected"/>
-<input class="cron_manager_input" type="button" id="TakeSnapshot" value="Take Snapshot"/>
+<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
+<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
 
 	<table id="tablacron" class="wp-list-table plugins cron_manager">
 <thead>
