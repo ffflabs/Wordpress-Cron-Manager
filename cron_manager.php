@@ -207,19 +207,19 @@ global $wpdb;
 	
 	?>
 <div class="cron_manager_actions">
-	<input class="cron_manager_input"  type="checkbox" id="selectAll" value="1"/>
 	<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
 	<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
 </div>
 	<table id="tablacron" class="wp-list-table plugins cron_manager">
 <thead>
-		<tr><th style="width:65px;"><?php _e('Delete', 'cron_manager'); ?></th>
-			<th  ><?php _e('Next run GMT (timestamp)', 'cron_manager'); ?></th>
-			<th ><?php _e('Seconds left', 'cron_manager'); ?></th>
-			<th  ><?php _e('Type of Schedule', 'cron_manager'); ?></th>
-			<th  ><?php _e('Hook Name', 'cron_manager'); ?></th>
-			<th  ><?php _e('Arg[]', 'cron_manager'); ?></th>
-		</tr>
+<tr>
+	<th style="width:65px;"><label class="selectit"><input type="checkbox" id="selectAll" value="1"/></label> <?php _e('Delete', 'cron_manager'); ?></th>
+	<th><?php _e('Next run GMT (timestamp)', 'cron_manager'); ?></th>
+	<th><?php _e('Seconds left', 'cron_manager'); ?></th>
+	<th><?php _e('Type of Schedule', 'cron_manager'); ?></th>
+	<th><?php _e('Hook Name', 'cron_manager'); ?></th>
+	<th><?php _e('Arg[]', 'cron_manager'); ?></th>
+</tr>
 </thead>
 <tbody>
 	<?php
