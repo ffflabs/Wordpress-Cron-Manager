@@ -31,11 +31,15 @@ if(!$intervalo=get_option('intervalo_cron')) {
 	
 	
 } 
+
+
+function fff_cron_manager_init() {
+
+	add_action('admin_menu', 'fff_menu');
+	add_action('admin_head', 'fff_cron_manager_head' );
 	
-
-	
-
-
+}
+add_action('init', 'fff_cron_manager_init');
 
 
 if (isset($_POST['snapshot'])) {
@@ -102,21 +106,18 @@ die();
 
 
 
-add_action('admin_menu', 'fff_menu');
-add_action( 'admin_head', 'fff_cron_manager_head' );
-
 function fff_menu() {
 	add_menu_page('Cron Manager', 'Cron Manager', 'create_users', 'fff_cron_manager', 'fff_cron_manager');
 }
 
+function fff_cron_manager_scripts() {
+	wp_register_script('datatables', 'https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js', array('jquery'));
+	//wp_deregister_script('datatables');
+	wp_enqueue_script('datatables');
+}
+add_action('admin_enqueue_scripts', 'fff_cron_manager_scripts');
+
 function fff_cron_manager_head() {
-	
-		wp_deregister_script('jquery');
-		wp_register_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js');
-		wp_enqueue_script('jquery');
-		wp_deregister_script('datatables');
-		wp_register_script('datatables', 'https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js');
-		wp_enqueue_script('datatables');
 		
 echo '<style type="text/css">
 		  @import "https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css";
