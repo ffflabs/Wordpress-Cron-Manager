@@ -111,37 +111,16 @@ function fff_menu() {
 }
 
 function fff_cron_manager_scripts() {
+	wp_deregister_script('datatables');
 	wp_register_script('datatables', 'https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/jquery.dataTables.min.js', array('jquery'));
-	//wp_deregister_script('datatables');
 	wp_enqueue_script('datatables');
+	wp_enqueue_style( 'datatables', 'https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css');
+	wp_enqueue_style( 'cron_manager', FFF_CRON_MANAGER_PLUGIN_URL . '/cron_manager.css' );
 }
 add_action('admin_enqueue_scripts', 'fff_cron_manager_scripts');
 
 function fff_cron_manager_head() {
-		
-echo '<style type="text/css">
-		  @import "https://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.0/css/jquery.dataTables.css";
-	
-	.cron_manager { border-collapse:collapse;}
-	.cron_manager th {border:1px solid #333;  border-collapse:collapse;text-align:center;padding:2px 5px;}
-	.cron_manager td {border:1px solid #CCC;border-collapse:collapse;text-align:center;border:1px solid #999;text-align:center;}
-	.cron_manager td:first-child, .listapais th:first-child { text-align:left;}
-		  	.cron_manager tr:nth-child(odd) { background:#FFF; }
-	.cron_manager tr:nth-child(even) { background:#F7F7F7; }
-	.cron_manager tbody tr:hover {background:#F0FfF0; color:#336633;}
-	ul.argumentos {float:left;list-style-type:none;}
-	ul.argumentos li {float:left;list-style-type:none;margin-left:10px;}
-	.deletethiscron {margin:auto;text-align:center;}
-	 .deleteimg {display: inline-block;height: 20px;width: 20px;background: url(' . FFF_CRON_MANAGER_PLUGIN_URL . '/delete-icon.gif) no-repeat;margin: -5px 5px -5px 5px;}
-	.dataTables_wrapper {width:90%;}
-	.cron_manager_input {float: left;
-margin: -5px 5px -15px 5px !important;
-vertical-align: center;
-height: 25px; }
-	 </style>';
 	?>
-	   
-
 	<script>
 		jQuery('document').ready(function() {
 			jQuery('.deletethiscron').click(function() {
