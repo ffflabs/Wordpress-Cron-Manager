@@ -8,6 +8,18 @@
   Author URI: http://ffflabs.com/wordpress/
   Loosely based on Simon Wheatley's http://wordpress.org/extend/plugins/cron-view/
  */
+// Plugin Folder Path
+if ( ! defined( 'FFF_CRON_MANAGER_PLUGIN_DIR' ) )
+	define( 'FFF_CRON_MANAGER_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . basename( dirname( __FILE__ ) ) . '/' );
+
+// Plugin Folder URL
+if ( ! defined( 'FFF_CRON_MANAGER_PLUGIN_URL' ) )
+	define( 'FFF_CRON_MANAGER_PLUGIN_URL', plugin_dir_url( FFF_CRON_MANAGER_PLUGIN_DIR ) . basename( dirname( __FILE__ ) ) . '/' );
+
+// Plugin Root File
+if ( ! defined( 'FFF_CRON_MANAGER_PLUGIN_FILE' ) )
+	define( 'FFF_CRON_MANAGER_PLUGIN_FILE', __FILE__ );
+
 $curtime=time();
 global $wpdb;
 
@@ -119,7 +131,7 @@ echo '<style type="text/css">
 	ul.argumentos {float:left;list-style-type:none;}
 	ul.argumentos li {float:left;list-style-type:none;margin-left:10px;}
 	.deletethiscron {margin:auto;text-align:center;}
-	 .deleteimg {display: inline-block;height: 20px;width: 20px;background: url(/wp-content/plugins/cron_manager/delete-icon.gif) no-repeat;margin: -5px 5px -5px 5px;}
+	 .deleteimg {display: inline-block;height: 20px;width: 20px;background: url(' . FFF_CRON_MANAGER_PLUGIN_URL . '/delete-icon.gif) no-repeat;margin: -5px 5px -5px 5px;}
 	.dataTables_wrapper {width:90%;}
 	.cron_manager_input {float: left;
 margin: -5px 5px -15px 5px !important;
