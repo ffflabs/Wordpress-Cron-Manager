@@ -30,7 +30,7 @@ if (isset($_POST['snapshot'])) {
 	add_option('cronsnapshot_' . $curtime, get_option('cron'));
 	 
 	
-} else if ($_POST['action']=='takesnapshot') {
+} else if (isset($_POST['action']) && $_POST['action']=='takesnapshot') {
 
 
 add_option('cronsnapshot_' . $curtime, get_option('cron'));
@@ -43,7 +43,7 @@ $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as
 		echo '</form>';
 	}
 die();
-} else if ($_POST['action']=='deletesnapshot' && !empty($_POST['snapshottime']) && $snapshottime=intval($_POST['snapshottime']) ) {
+} else if (isset($_POST['action']) && $_POST['action']=='deletesnapshot' && !empty($_POST['snapshottime']) && $snapshottime=intval($_POST['snapshottime']) ) {
 	delete_option('cronsnapshot_' . $snapshottime);
 $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
 	foreach ($snapshots as $snapshot) {
