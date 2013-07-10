@@ -8,6 +8,7 @@
   Author URI: http://ffflabs.com/wordpress/
   Loosely based on Simon Wheatley's http://wordpress.org/extend/plugins/cron-view/
  */
+
 // Plugin Folder Path
 if ( ! defined( 'FFF_CRON_MANAGER_PLUGIN_DIR' ) )
 	define( 'FFF_CRON_MANAGER_PLUGIN_DIR', WP_PLUGIN_DIR . '/' . basename( dirname( __FILE__ ) ) . '/' );
@@ -23,45 +24,36 @@ if ( ! defined( 'FFF_CRON_MANAGER_PLUGIN_FILE' ) )
 $curtime=time();
 global $wpdb;
 
- 
 if(!$intervalo=get_option('intervalo_cron')) {
 	add_option('intervalo_cron',100);
 } else if(isset($_POST['intervalo_cron'])) {
 	update_option('intervalo_cron',intval($_POST['intervalo_cron']));
-	
-	
-} 
-
+} 	
 
 function fff_cron_manager_init() {
-
 	add_action('admin_menu', 'fff_menu');
 	add_action('admin_head', 'fff_cron_manager_head' );
-	
 }
 add_action('init', 'fff_cron_manager_init');
 
 
 if (isset($_POST['snapshot'])) {
 	add_option('cronsnapshot_' . $curtime, get_option('cron'));
-	 
-	
 } else if (isset($_POST['action']) && $_POST['action']=='takesnapshot') {
-
 
 add_option('cronsnapshot_' . $curtime, get_option('cron'));
 $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
-	foreach ($snapshots as $snapshot) {
-		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
-		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
-		echo '<input type="hidden" id="restoretimestamp" name="restoretimestamp" value="'.$snapshot->restoretimestamp.'"/>';
+foreach ($snapshots as $snapshot) {
+	echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
+	echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
+	echo '<input type="hidden" id="restoretimestamp" name="restoretimestamp" value="'.$snapshot->restoretimestamp.'"/>';
 	echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
-		echo '</form>';
-	}
+	echo '</form>';
+}
 die();
 } else if (isset($_POST['action']) && $_POST['action']=='deletesnapshot' && !empty($_POST['snapshottime']) && $snapshottime=intval($_POST['snapshottime']) ) {
 	delete_option('cronsnapshot_' . $snapshottime);
-$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
+	$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
 	foreach ($snapshots as $snapshot) {
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
@@ -69,11 +61,11 @@ $snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as
 		echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
 		echo '</form>';
 	}
-die();	
-	
+	die();	
 } else if (isset($_POST['restorecron']) && isset($_POST['restoretimestamp']) && get_option('cronsnapshot_' . intval($_POST['restoretimestamp']))) {
-
+	
 	update_option('cron', get_option('cronsnapshot_' . intval($_POST['restoretimestamp'])));
+	
 } else if (isset($_GET['timestamp']) && isset($_GET['hook']) && isset($_GET['action']) && $_GET['action'] == 'deletecron') {
 
 	$crons = _get_cron_array();
@@ -81,8 +73,7 @@ die();
 	$hook = $_GET['hook'];
 	unset($crons[$timestamp][$hook]);
 	
-	
-        _set_cron_array($crons);
+	_set_cron_array($crons);
 	echo $timestamp . $hook;
 	foreach($crons as $timestamp => $content) {
 		if (sizeof($content)==0) unset($crons[$timestamp]);
@@ -95,16 +86,13 @@ die();
 	delete_option( $optionname );
 	echo $optionname;
 	
-	 
-	
 } else {
 	$snapshot_count = $wpdb->get_results("SELECT COUNT(*) snapshots FROM  {$wpdb->options}  where option_name like '%cronsnapshot_%'");
 
-	if (!$snapshot_count)
+	if (!$snapshot_count) {
 		add_option('cronsnapshot_' . $curtime, get_option('cron'));
+	}	
 }
-
-
 
 function fff_menu() {
 	add_menu_page('Cron Manager', 'Cron Manager', 'create_users', 'fff_cron_manager', 'fff_cron_manager');
@@ -170,28 +158,24 @@ function fff_cron_manager_head() {
 			});
 			
 			 var oTable =jQuery('#tablacron').dataTable( {
- "sDom": 'frti',
- "iDisplayLength": -1
-  } );
+				 "sDom": 'frti',
+				 "iDisplayLength": -1
+ 			 });
 		});
 	</script>
 	<?php
 }
 	
 function fff_cron_manager() {
-global $wpdb;
+	global $wpdb;
 	
 	$crons = _get_cron_array();
-/*foreach($crons as $cron => $content) {
+	/*foreach($crons as $cron => $content) {
 		echo '<pre>';print_r($cron);echo 'Contiene '.sizeof($content).' elementos;</pre>';
 		
 	}*/
 	$ahora = time();
 
-	 
-	
-	 
-	
 	echo '<h2>Available Cron Snapshots</h2><div id="available_snapshots">';
 	$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
 	foreach ($snapshots as $snapshot) {
@@ -211,50 +195,46 @@ global $wpdb;
 	<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
 </div>
 	<table id="tablacron" class="wp-list-table plugins cron_manager">
-<thead>
-<tr>
-	<th style="width:65px;"><label class="selectit"><input type="checkbox" id="selectAll" value="1"/></label> <?php _e('Delete', 'cron_manager'); ?></th>
-	<th><?php _e('Next run GMT (timestamp)', 'cron_manager'); ?></th>
-	<th><?php _e('Seconds left', 'cron_manager'); ?></th>
-	<th><?php _e('Type of Schedule', 'cron_manager'); ?></th>
-	<th><?php _e('Hook Name', 'cron_manager'); ?></th>
-	<th><?php _e('Arg[]', 'cron_manager'); ?></th>
-</tr>
-</thead>
-<tbody>
-	<?php
-	foreach ($crons as $timestamp => $cronhooks) :
-		foreach ($cronhooks as $hook => $cronjobs) :
-			foreach ($cronjobs as $cronjob) :
-				echo '<tr id="' . $timestamp . $hook . '"><td>';
-				echo "<input class=\"borrarmasivo\" type=\"checkbox\" id=\"cb_". $timestamp . $hook."\"  alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'  />";
-				echo "<a class='deletethiscron deleteimg' href='javascript:void(0);' alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'></td>";
-				
-				echo '<td style="text-align:center;">' . date('Y-m-d h:i:s', $timestamp) . ' - ' . $timestamp;
-				echo '</td><td style="text-align:center;">' . ($timestamp - $ahora) . '</td><td>';
-
-
-				if ($cronjob['schedule']) {
-					echo $schedule [$cronjob['schedule']]['display'];
-				} else {
-					?><em><?php _e('One-off event', 'cron_manager'); ?></em><?php
-				}
-				?>
-				</td>
-				<td><?php echo $hook; ?></td>
-				<td><ul class="argumentos"><?php foreach ($cronjob['args'] as $num => $arg)
-					echo "<li>[{$num}]:$arg</li>"; ?></ul></td>
-				</tr>
-				<?php
+		<thead>
+			<tr>
+				<th style="width:65px;"><label class="selectit"><input type="checkbox" id="selectAll" value="1"/></label> <?php _e('Delete', 'cron_manager'); ?></th>
+				<th><?php _e('Next run GMT (timestamp)', 'cron_manager'); ?></th>
+				<th><?php _e('Seconds left', 'cron_manager'); ?></th>
+				<th><?php _e('Type of Schedule', 'cron_manager'); ?></th>
+				<th><?php _e('Hook Name', 'cron_manager'); ?></th>
+				<th><?php _e('Arg[]', 'cron_manager'); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($crons as $timestamp => $cronhooks) :
+				foreach ($cronhooks as $hook => $cronjobs) :
+					foreach ($cronjobs as $cronjob) :
+						echo '<tr id="' . $timestamp . $hook . '"><td>';
+						echo "<input class=\"borrarmasivo\" type=\"checkbox\" id=\"cb_". $timestamp . $hook."\"  alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'  />";
+						echo "<a class='deletethiscron deleteimg' href='javascript:void(0);' alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'></td>";
+						
+						echo '<td style="text-align:center;">' . date('Y-m-d h:i:s', $timestamp) . ' - ' . $timestamp;
+						echo '</td><td style="text-align:center;">' . ($timestamp - $ahora) . '</td><td>';
+		
+						if ($cronjob['schedule']) {
+							echo $schedule [$cronjob['schedule']]['display'];
+						} else {
+							?><em><?php _e('One-off event', 'cron_manager'); ?></em><?php
+						}
+						?>
+						</td>
+						<td><?php echo $hook; ?></td>
+						<td>
+							<ul class="argumentos"><?php foreach ($cronjob['args'] as $num => $arg)
+							echo "<li>[{$num}]:$arg</li>"; ?></ul></td>
+						</tr>
+					<?php
+					endforeach;
 				endforeach;
 			endforeach;
-		endforeach;
-		?>
-	</tbody>
+			?>
+		</tbody>
 	</table>
-
-
-
 <?php
 }
-
