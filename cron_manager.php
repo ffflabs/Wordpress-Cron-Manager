@@ -42,7 +42,7 @@ if (isset($_POST['snapshot'])) {
 } else if (isset($_POST['action']) && $_POST['action']=='takesnapshot') {
 
 add_option('cronsnapshot_' . $curtime, get_option('cron'));
-$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
+$snapshots = $wpdb->get_results( "SELECT REPLACE(option_name, 'cronsnapshot_', '') AS restoretimestamp FROM {$wpdb->options} WHERE option_name LIKE '%cronsnapshot_%';" );
 foreach ($snapshots as $snapshot) {
 	echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 	echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
@@ -53,7 +53,7 @@ foreach ($snapshots as $snapshot) {
 die();
 } else if (isset($_POST['action']) && $_POST['action']=='deletesnapshot' && !empty($_POST['snapshottime']) && $snapshottime=intval($_POST['snapshottime']) ) {
 	delete_option('cronsnapshot_' . $snapshottime);
-	$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
+	$snapshots = $wpdb->get_results( "SELECT REPLACE(option_name, 'cronsnapshot_', '') AS restoretimestamp FROM {$wpdb->options} WHERE option_name LIKE '%cronsnapshot_%';" );
 	foreach ($snapshots as $snapshot) {
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
@@ -87,7 +87,7 @@ die();
 	echo $optionname;
 	
 } else {
-	$snapshot_count = $wpdb->get_results("SELECT COUNT(*) snapshots FROM  {$wpdb->options}  where option_name like '%cronsnapshot_%'");
+	$snapshot_count = $wpdb->get_results( "SELECT COUNT(*) snapshots FROM  {$wpdb->options}  WHERE option_name LIKE '%cronsnapshot_%'" );
 
 	if (!$snapshot_count) {
 		add_option('cronsnapshot_' . $curtime, get_option('cron'));
@@ -110,58 +110,58 @@ add_action('admin_enqueue_scripts', 'fff_cron_manager_scripts');
 function fff_cron_manager_head() {
 	?>
 	<script>
-		jQuery('document').ready(function() {
-			jQuery('.deletethiscron').click(function() {
-				var wichcron=jQuery(this).attr('rel');
+	jQuery('document').ready(function() {
+		jQuery('.deletethiscron').click(function() {
+			var wichcron=jQuery(this).attr('rel');
+			var geturl=jQuery(this).attr('alt');
+			jQuery.get(geturl,function(data) {
+				jQuery('#'+data).slideUp();
+			});
+		});
+						
+		jQuery('#TakeSnapshot').click(function() {
+			jQuery.ajax({
+			type: "POST",
+			data: { action : 'takesnapshot'},
+					context: document.body
+			}).done(function(data) { 
+				jQuery('#available_snapshots').html(data);
+			});
+		});	
+		
+		jQuery('.deletesnapshot').live('click',function() {
+			var Snapshottime=jQuery(this).attr('rel');
+			jQuery.ajax({
+				type: "POST",
+				data: {action : 'deletesnapshot',snapshottime:Snapshottime},
+						context: document.body
+				}).done(function(data) { 
+					jQuery('#available_snapshots').html(data);
+			});
+		});	
+					  
+		jQuery('#BorrarMasivo').click(function() {
+			jQuery('.borrarmasivo:checked').each(function() {
 				var geturl=jQuery(this).attr('alt');
 				jQuery.get(geturl,function(data) {
 					jQuery('#'+data).slideUp();
 				});
 			});
-		
-			jQuery('#TakeSnapshot').click(function() {
-				jQuery.ajax({
-					  type: "POST",
-					data: {action : 'takesnapshot'},
-					 context: document.body
-				  }).done(function(data) { 
-					jQuery('#available_snapshots').html(data);
-				  });
-			  });	
-			jQuery('.deletesnapshot').live('click',function() {
-				var Snapshottime=jQuery(this).attr('rel');
-				jQuery.ajax({
-					  type: "POST",
-					data: {action : 'deletesnapshot',snapshottime:Snapshottime},
-					 context: document.body
-				  }).done(function(data) { 
-					jQuery('#available_snapshots').html(data);
-				  });
-			  });	
-			  
-			jQuery('#BorrarMasivo').click(function() {
-				jQuery('.borrarmasivo:checked').each(function() {
-					var geturl=jQuery(this).attr('alt');
-						jQuery.get(geturl,function(data) {
-							jQuery('#'+data).slideUp();
-						});
-					
-				});
-			
-			});
-			jQuery('#selectAll').click(function() {
-				if(jQuery(this).is(':checked')) {
-					jQuery('.borrarmasivo').attr('checked','checked');
-				} else {
-					jQuery('.borrarmasivo').removeAttr('checked');
-				}
-			});
-			
-			 var oTable =jQuery('#tablacron').dataTable( {
-				 "sDom": 'frti',
-				 "iDisplayLength": -1
- 			 });
 		});
+		
+		jQuery('#selectAll').click(function() {
+			if(jQuery(this).is(':checked')) {
+				jQuery('.borrarmasivo').attr('checked','checked');
+			} else {
+				jQuery('.borrarmasivo').removeAttr('checked');
+			}
+		});
+					
+		var oTable =jQuery('#tablacron').dataTable( {
+			"sDom": 'frti',
+			"iDisplayLength": -1
+		});
+	});
 	</script>
 	<?php
 }
@@ -175,9 +175,11 @@ function fff_cron_manager() {
 		
 	}*/
 	$ahora = time();
-
-	echo '<h2>Available Cron Snapshots</h2><div id="available_snapshots">';
-	$snapshots=$wpdb->get_results("select replace(option_name,'cronsnapshot_','') as restoretimestamp from {$wpdb->options} where option_name like '%cronsnapshot_%';");
+	echo '<div class="wrap">';
+	echo get_screen_icon('generic');
+	echo '<h2>' . __('Cron Manager', 'fff_cron_manager') .'</h2>';
+	echo '<h3>Available Cron Snapshots</h3><div id="available_snapshots">';
+	$snapshots=$wpdb->get_results("SELECT REPLACE(option_name, 'cronsnapshot_', '') AS restoretimestamp FROM {$wpdb->options} WHERE option_name LIKE '%cronsnapshot_%';");
 	foreach ($snapshots as $snapshot) {
 		echo '<form method="POST" action="' . $_SERVER['REQUEST_URI'] . '" id="cronsnapshot_'.$snapshot->restoretimestamp.'">';
 		echo "<a class='deletesnapshot deleteimg' href='javascript:void(0);' rel='{$snapshot->restoretimestamp}'></a>";
@@ -185,15 +187,15 @@ function fff_cron_manager() {
 		echo '<input class="button" type="submit" id="restorecron" name="restorecron" value="Restore '.date('Y-m-d h:i:s', $snapshot->restoretimestamp).' Cron Snapshot"/>';
 		echo '</form>';
 	}
-	echo "</div><h2>This is your current Wordpress Cron</h2>";
+	echo "</div><h3>This is your current Wordpress Cron</h3>";
 
 	$schedule = wp_get_schedules();
 	
 	?>
-<div class="cron_manager_actions">
-	<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
-	<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
-</div>
+	<div class="cron_manager_actions">
+		<input class="button" type="button" id="BorrarMasivo" value="Delete Selected"/>
+		<input class="button" type="button" id="TakeSnapshot" value="Take Snapshot"/>
+	</div>
 	<table id="tablacron" class="wp-list-table plugins cron_manager">
 		<thead>
 			<tr>
@@ -236,5 +238,6 @@ function fff_cron_manager() {
 			?>
 		</tbody>
 	</table>
+	</div><!-- wrap -->
 <?php
 }
