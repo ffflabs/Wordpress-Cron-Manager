@@ -110,58 +110,58 @@ add_action('admin_enqueue_scripts', 'fff_cron_manager_scripts');
 function fff_cron_manager_head() {
 	?>
 	<script>
-		jQuery('document').ready(function() {
-			jQuery('.deletethiscron').click(function() {
-				var wichcron=jQuery(this).attr('rel');
+	jQuery('document').ready(function() {
+		jQuery('.deletethiscron').click(function() {
+			var wichcron=jQuery(this).attr('rel');
+			var geturl=jQuery(this).attr('alt');
+			jQuery.get(geturl,function(data) {
+				jQuery('#'+data).slideUp();
+			});
+		});
+						
+		jQuery('#TakeSnapshot').click(function() {
+			jQuery.ajax({
+			type: "POST",
+			data: { action : 'takesnapshot'},
+					context: document.body
+			}).done(function(data) { 
+				jQuery('#available_snapshots').html(data);
+			});
+		});	
+		
+		jQuery('.deletesnapshot').live('click',function() {
+			var Snapshottime=jQuery(this).attr('rel');
+			jQuery.ajax({
+				type: "POST",
+				data: {action : 'deletesnapshot',snapshottime:Snapshottime},
+						context: document.body
+				}).done(function(data) { 
+					jQuery('#available_snapshots').html(data);
+			});
+		});	
+					  
+		jQuery('#BorrarMasivo').click(function() {
+			jQuery('.borrarmasivo:checked').each(function() {
 				var geturl=jQuery(this).attr('alt');
 				jQuery.get(geturl,function(data) {
 					jQuery('#'+data).slideUp();
 				});
 			});
-		
-			jQuery('#TakeSnapshot').click(function() {
-				jQuery.ajax({
-					  type: "POST",
-					data: {action : 'takesnapshot'},
-					 context: document.body
-				  }).done(function(data) { 
-					jQuery('#available_snapshots').html(data);
-				  });
-			  });	
-			jQuery('.deletesnapshot').live('click',function() {
-				var Snapshottime=jQuery(this).attr('rel');
-				jQuery.ajax({
-					  type: "POST",
-					data: {action : 'deletesnapshot',snapshottime:Snapshottime},
-					 context: document.body
-				  }).done(function(data) { 
-					jQuery('#available_snapshots').html(data);
-				  });
-			  });	
-			  
-			jQuery('#BorrarMasivo').click(function() {
-				jQuery('.borrarmasivo:checked').each(function() {
-					var geturl=jQuery(this).attr('alt');
-						jQuery.get(geturl,function(data) {
-							jQuery('#'+data).slideUp();
-						});
-					
-				});
-			
-			});
-			jQuery('#selectAll').click(function() {
-				if(jQuery(this).is(':checked')) {
-					jQuery('.borrarmasivo').attr('checked','checked');
-				} else {
-					jQuery('.borrarmasivo').removeAttr('checked');
-				}
-			});
-			
-			 var oTable =jQuery('#tablacron').dataTable( {
-				 "sDom": 'frti',
-				 "iDisplayLength": -1
- 			 });
 		});
+		
+		jQuery('#selectAll').click(function() {
+			if(jQuery(this).is(':checked')) {
+				jQuery('.borrarmasivo').attr('checked','checked');
+			} else {
+				jQuery('.borrarmasivo').removeAttr('checked');
+			}
+		});
+					
+		var oTable =jQuery('#tablacron').dataTable( {
+			"sDom": 'frti',
+			"iDisplayLength": -1
+		});
+	});
 	</script>
 	<?php
 }
