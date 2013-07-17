@@ -11,4 +11,4 @@ ul.argumentos li { float:left;list-style-type:none;margin-left:10px; }
 .deleteimg { display: inline-block;height: 20px;width: 20px;background: url('delete-icon.gif') no-repeat;margin: -5px 5px -5px 5px; }
 .dataTables_wrapper { width:90%; }
 .cron_manager_input { float: left ;margin: -5px 5px -15px 5px !important;vertical-align: center;height: 25px; }
-.cron_manager_actions { margin-bottom: 35px;width: 90%; }
+.cron_manager_actions { width: 90%; }
