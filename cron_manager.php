@@ -4,7 +4,7 @@
   Plugin URI: http://wordpress.org/extend/plugins/cron_manager/
   Description: List and delete cron jobs from WP Cron
   Author: Felipe Figueroa
-  Version: 0.7
+  Version: 1.0.0
   Author URI: http://ffflabs.com/wordpress/
   Loosely based on Simon Wheatley's http://wordpress.org/extend/plugins/cron-view/
  */
@@ -212,12 +212,20 @@ function fff_cron_manager() {
 			foreach ($crons as $timestamp => $cronhooks) :
 				foreach ($cronhooks as $hook => $cronjobs) :
 					foreach ($cronjobs as $cronjob) :
+						$out = "";
 						echo '<tr id="' . $timestamp . $hook . '"><td>';
 						echo "<input class=\"borrarmasivo\" type=\"checkbox\" id=\"cb_". $timestamp . $hook."\"  alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'  />";
 						echo "<a class='deletethiscron deleteimg' href='javascript:void(0);' alt='{$_SERVER['REQUEST_URI']}&timestamp=$timestamp&action=deletecron&hook=$hook' rel='$timestamp.$hook'></td>";
 						
-						echo '<td style="text-align:center;">' . date('Y-m-d h:i:s', $timestamp) . ' - ' . $timestamp;
-						echo '</td><td style="text-align:center;">' . ($timestamp - $ahora) . '</td><td>';
+						echo '<td style="text-align:center;">' . date('Y-m-d h:i:s', $timestamp) . ' - ' . $timestamp . '</td>';
+						$delta = $timestamp - $ahora;
+						if($delta <= 0) {
+							$out .= '<span class="fancy">' . $delta . '</span>';
+						} else {
+							$out .= $delta;
+						}	
+						
+						echo '<td style="text-align:center;">' . $out . '</td><td>';
 		
 						if ($cronjob['schedule']) {
 							echo $schedule [$cronjob['schedule']]['display'];
