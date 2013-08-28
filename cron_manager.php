@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: FFF Cron Manager
-  Plugin URI: http://wordpress.org/extend/plugins/cron_manager/
+  Plugin URI: http://wordpress.org/plugins/fff-cron-manager/
   Description: List and delete cron jobs from WP Cron
   Author: Felipe Figueroa
   Version: 1.0.0
