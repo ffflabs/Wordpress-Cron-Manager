@@ -1,13 +1,14 @@
 === FFF-Cron-Manager ===
-Contributors: amenadiel
-Tags: wp-cron
-Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: "trunk"
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+* Contributors: amenadiel
+* Tags: wp-cron
+* Requires at least: 3.0
+* Tested up to: 3.4.1
+* Stable tag: "trunk"
+* License: GPLv2 or later
+*License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 This plugin will add an option to list, delete and restore cronjobs in WP Cron
+
 == Description ==
 
 WP Plugin URL: http://wordpress.org/extend/plugins/fff-cron-manager/
